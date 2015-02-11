@@ -4,10 +4,11 @@ var express = require('express'),
     servicebus = require('servicebus');
 
 var Document = require('./document'),
-    bus = servicebus.bus({ url: process.env.BUS_URL }),
+    busUrl = process.env.RABBITMQ_PORT && process.env.RABBITMQ_PORT.replace('tcp', 'amqp'),
+    bus = servicebus.bus({ url: busUrl }),
     server = express(),
     port = process.env.PORT || 3001,
-    dbUrl = process.env.DB_URL || 'mongodb://localhost/microservices-documents-admin';
+    dbUrl = process.env.ADMINDB_PORT && process.env.ADMINDB_PORT.replace('tcp','mongodb') || 'mongodb://localhost/microservices-documents-admin';
 
 mongoose.connect(dbUrl);
 
